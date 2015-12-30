@@ -20,6 +20,8 @@ BY YOU OR THIRD PARTIES OR A FAILURE OF THE PROGRAM OR HARDWARE DESIGN TO
 OPERATE WITH ANY OTHER PROGRAMS OR HARDWARE), EVEN IF SUCH HOLDER OR OTHER 
 PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
 
+![Board Image](board.jpg?raw=true)
+
 RA835AI Rasberry Pi "HAT" for Stratux 
 =====================================
 
@@ -31,7 +33,6 @@ Currently it is just  a starting point.  Some things yet to work out:
 - Is it connected correctly?
 - Is FSYNC supposed to be grounded?  Data sheet says yes; forums leave doubt.
 - Pull-ups for I2C?
-- Decoupling/filtering the power lines?
 
 I tried by best to keep the ground planes clear of traces so that hopefully
 it shields the GPS module from the Pi processor underneith.
@@ -39,4 +40,11 @@ it shields the GPS module from the Pi processor underneith.
 This uses a custom library for the RA835AI, and a contributed library from
 www.cadsoftusa.com "raspberrypi_bastelstube_v13" for the Pi GPIO connector
 and board layout.
+
+Revision History
+================
+0.1  - Initial commit
+0.2  - Added C1 and C2 decoupling capacitors.  0.1uF  (P-tolerance=+100% ,-0%) 
+	   and 10uF values recommended by on the RY835AI data sheet. 
+	   Added a cut-trace jumper to disconnect FSYNC from GND if desired.
 
