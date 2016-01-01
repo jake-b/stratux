@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.05" unitdist="inch" unit="inch" style="lines" multiple="1" display="yes" altdistance="0.025" altunitdist="inch" altunit="inch"/>
+<grid distance="0.05" unitdist="inch" unit="mm" style="lines" multiple="1" display="yes" altdistance="0.025" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
@@ -61,10 +61,10 @@
 <wire x1="-25" y1="25" x2="-25" y2="-25" width="0.127" layer="21"/>
 <wire x1="-25" y1="-25" x2="25" y2="-25" width="0.127" layer="21"/>
 <wire x1="25" y1="25" x2="-25" y2="25" width="0.127" layer="21"/>
-<pad name="GND@6" x="-21" y="-21" drill="3" diameter="6" shape="square"/>
-<pad name="GND@7" x="21" y="-21" drill="3" diameter="6" shape="square"/>
-<pad name="GND@5" x="21" y="21" drill="3" diameter="6" shape="square"/>
-<pad name="GND@4" x="-21" y="21" drill="3" diameter="6" shape="square"/>
+<pad name="GND@6" x="-21" y="-21" drill="3" diameter="6" thermals="no"/>
+<pad name="GND@7" x="21" y="-21" drill="3" diameter="6" thermals="no"/>
+<pad name="GND@5" x="21" y="21" drill="3" diameter="6" thermals="no"/>
+<pad name="GND@4" x="-21" y="21" drill="3" diameter="6" thermals="no"/>
 <pad name="GND@1" x="-23" y="5.08" drill="1.016" shape="long"/>
 <pad name="TXD" x="-23" y="2.54" drill="1.016" shape="long"/>
 <pad name="RXD" x="-23" y="0" drill="1.016" shape="long"/>
@@ -107,6 +107,16 @@
 <text x="-3.81" y="19.05" size="1.27" layer="21" align="bottom-center">Y</text>
 <text x="6.35" y="8.89" size="1.27" layer="21" align="center-left">X</text>
 <text x="-5.08" y="7.62" size="1.27" layer="21" align="top-right">Z</text>
+<rectangle x1="-17.5" y1="-17.5" x2="17.5" y2="17.5" layer="39"/>
+<rectangle x1="-17.5" y1="-17.5" x2="17.5" y2="17.5" layer="40"/>
+<wire x1="-17.78" y1="-15.24" x2="-17.78" y2="-17.78" width="0.127" layer="21"/>
+<wire x1="-17.78" y1="-17.78" x2="-15.24" y2="-17.78" width="0.127" layer="21"/>
+<wire x1="15.24" y1="-17.78" x2="17.78" y2="-17.78" width="0.127" layer="21"/>
+<wire x1="17.78" y1="-17.78" x2="17.78" y2="-15.24" width="0.127" layer="21"/>
+<wire x1="15.24" y1="17.78" x2="17.78" y2="17.78" width="0.127" layer="21"/>
+<wire x1="17.78" y1="17.78" x2="17.78" y2="15.24" width="0.127" layer="21"/>
+<wire x1="-15.24" y1="17.78" x2="-17.78" y2="17.78" width="0.127" layer="21"/>
+<wire x1="-17.78" y1="17.78" x2="-17.78" y2="15.24" width="0.127" layer="21"/>
 </package>
 </packages>
 <symbols>
