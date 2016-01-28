@@ -1,5 +1,6 @@
 Disclaimer
 ==========
+
 BECAUSE THE HARDWARE DESIGN IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY
 FOR THE HARDWARE DESIGN, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT 
 WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES 
@@ -25,14 +26,17 @@ PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
 RA835AI Rasberry Pi "HAT" for Stratux 
 =====================================
 
+This board is designed for DEVELOPMENT PURPOSES ONLY.  It is not intended for
+use in flight or in an airplane.  Use this board at your own risk!
+
 This is a really rough draft of a "HAT" (Hardware Attached on Top) to connect
 a RA835AI to the Rasberry Pi for use primarily with Stratux.
 
 Currently it is just  a starting point.  Some things yet to work out:
 
-- Is it connected correctly?
 - Is FSYNC supposed to be grounded?  Data sheet says yes; forums leave doubt.
-- Pull-ups for I2C?
+- Pull-ups for I2C? - not necessary, as I understand that the Pi itself has
+1.8k pullups
 
 I tried by best to keep the ground planes clear of traces so that hopefully
 it shields the GPS module from the Pi processor underneith.
@@ -45,9 +49,12 @@ Revision History
 ================
 - 0.1  - Initial commit
 - 0.2  - Added C1 and C2 decoupling capacitors.  0.1uF  (P-tolerance=+100% ,-0%) 
-	     and 10uF values recommended by on the RY835AI data sheet. 
-	     Added a cut-trace jumper to disconnect FSYNC from GND if desired.
+         and 10uF values recommended by on the RY835AI data sheet. 
+         Added a cut-trace jumper to disconnect FSYNC from GND if desired.
+
 - 0.3  - Keepout area added underneith GPS antenna area.  Pads around mount
-         points redeuced and made round to make room for signal traces.
+         points reduced and made round to make room for signal traces.
+- 0.4  - Added "PWR IN" circut -- [see page 14](https://learn.adafruit.com/downloads/pdf/introducing-the-raspberry-pi-model-b-plus-plus-differences-vs-model-b.pdf)
+         Added FAN output controlled by GPIO4.
 
 
