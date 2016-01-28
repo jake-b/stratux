@@ -51,7 +51,6 @@ Revision History
 - 0.2  - Added C1 and C2 decoupling capacitors.  0.1uF  (P-tolerance=+100% ,-0%) 
          and 10uF values recommended by on the RY835AI data sheet. 
          Added a cut-trace jumper to disconnect FSYNC from GND if desired.
-
 - 0.3  - Keepout area added underneith GPS antenna area.  Pads around mount
          points reduced and made round to make room for signal traces.
 - 0.4  - Added "PWR IN" circut -- [see page 14](https://learn.adafruit.com/downloads/pdf/introducing-the-raspberry-pi-model-b-plus-plus-differences-vs-model-b.pdf)
