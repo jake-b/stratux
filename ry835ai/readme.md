@@ -55,5 +55,6 @@ Revision History
          points reduced and made round to make room for signal traces.
 - 0.4  - Added "PWR IN" circut -- [see page 14](https://learn.adafruit.com/downloads/pdf/introducing-the-raspberry-pi-model-b-plus-plus-differences-vs-model-b.pdf)
          Added FAN output controlled by GPIO4.
+         (minor change to explicitly list R1's value as 10k)
 
 
