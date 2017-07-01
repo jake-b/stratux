@@ -40,12 +40,13 @@ function StatusCtrl($rootScope, $scope, $state, $http, $interval) {
 			console.log('Received status update.')
 
 			var status = JSON.parse(msg.data)
-				// Update Status
+			// Update Status
 			$scope.Version = status.Version;
+			$scope.Build = status.Build.substr(0, 10);
 			$scope.Devices = status.Devices;
+			$scope.Ping_connected = status.Ping_connected;
 			$scope.Connected_Users = status.Connected_Users;
 			$scope.UAT_messages_last_minute = status.UAT_messages_last_minute;
-			// $scope.UAT_products_last_minute = JSON.stringify(status.UAT_products_last_minute);
 			$scope.UAT_messages_max = status.UAT_messages_max;
 			$scope.ES_messages_last_minute = status.ES_messages_last_minute;
 			$scope.ES_messages_max = status.ES_messages_max;
@@ -53,21 +54,81 @@ function StatusCtrl($rootScope, $scope, $state, $http, $interval) {
 			$scope.GPS_satellites_tracked = status.GPS_satellites_tracked;
 			$scope.GPS_satellites_seen = status.GPS_satellites_seen;
 			$scope.GPS_solution = status.GPS_solution;
-			$scope.RY835AI_connected = status.RY835AI_connected;
+			switch(status.GPS_solution) {
+				case "Disconnected":
+				case "No Fix":
+				case "Unknown":
+					$scope.GPS_position_accuracy = "";
+					break;
+				default:
+					$scope.GPS_position_accuracy = ", " + status.GPS_position_accuracy.toFixed(1) + " m";
+			}
+			var gpsHardwareCode = (status.GPS_detected_type & 0x0f);
+			var tempGpsHardwareString = "Not installed";
+			switch(gpsHardwareCode) {
+				case 1:
+					tempGpsHardwareString = "Serial port";
+					break;
+				case 2:
+					tempGpsHardwareString = "Prolific USB-serial bridge";
+					break;
+				case 6:
+					tempGpsHardwareString = "USB u-blox 6 GPS receiver";
+					break;
+				case 7:
+					tempGpsHardwareString = "USB u-blox 7 GNSS receiver";
+					break;
+				case 8:
+					tempGpsHardwareString = "USB u-blox 8 GNSS receiver";
+					break;
+				default:
+					tempGpsHardwareString = "Not installed";
+			}
+			$scope.GPS_hardware = tempGpsHardwareString;
+			var gpsProtocol = (status.GPS_detected_type >> 4);
+			var tempGpsProtocolString = "Not communicating";
+			switch(gpsProtocol) {
+				case 1:
+					tempGpsProtocolString = "NMEA protocol";
+					break;
+				case 3:
+					tempGpsProtocolString = "NMEA-UBX protocol";
+					break;
+				default:
+					tempGpsProtocolString = "Not communicating";
+			}
+			$scope.GPS_protocol = tempGpsProtocolString;
+			
+			var MiBFree = status.DiskBytesFree/1048576;
+			$scope.DiskSpace = MiBFree.toFixed(1);
+			
+			$scope.UAT_METAR_total = status.UAT_METAR_total;
+			$scope.UAT_TAF_total = status.UAT_TAF_total;
+			$scope.UAT_NEXRAD_total = status.UAT_NEXRAD_total;
+			$scope.UAT_SIGMET_total = status.UAT_SIGMET_total;
+			$scope.UAT_PIREP_total = status.UAT_PIREP_total;
+			$scope.UAT_NOTAM_total = status.UAT_NOTAM_total;
+			$scope.UAT_OTHER_total = status.UAT_OTHER_total;
+			// Errors array.
+			if (status.Errors.length > 0) {
+				$scope.visible_errors = true;
+				$scope.Errors = status.Errors;
+			}
 
 			var uptime = status.Uptime;
 			if (uptime != undefined) {
-				var up_s = parseInt((uptime / 1000) % 60),
-					up_m = parseInt((uptime / (1000 * 60)) % 60),
-					up_h = parseInt((uptime / (1000 * 60 * 60)) % 24);
-				$scope.Uptime = String(((up_h < 10) ? "0" + up_h : up_h) + "h" + ((up_m < 10) ? "0" + up_m : up_m) + "m" + ((up_s < 10) ? "0" + up_s : up_s) + "s");
+				var up_d = parseInt((uptime/1000) / 86400),
+				    up_h = parseInt((uptime/1000 - 86400*up_d) / 3600),
+				    up_m = parseInt((uptime/1000 - 86400*up_d - 3600*up_h) / 60),
+				    up_s = parseInt((uptime/1000 - 86400*up_d - 3600*up_h - 60*up_m));
+				$scope.Uptime = String(up_d + "/" + ((up_h < 10) ? "0" + up_h : up_h) + ":" + ((up_m < 10) ? "0" + up_m : up_m) + ":" + ((up_s < 10) ? "0" + up_s : up_s));
 			} else {
 				// $('#Uptime').text('unavailable');
 			}
 			var boardtemp = status.CPUTemp;
 			if (boardtemp != undefined) {
 				/* boardtemp is celcius to tenths */
-				$scope.CPUTemp = String(boardtemp.toFixed(1) + 'C / ' + ((boardtemp * 9 / 5) + 32.0).toFixed(1) + 'F');
+				$scope.CPUTemp = String(boardtemp.toFixed(1) + '°C / ' + ((boardtemp * 9 / 5) + 32.0).toFixed(1) + '°F');
 			} else {
 				// $('#CPUTemp').text('unavailable');
 			}
@@ -86,10 +147,15 @@ function StatusCtrl($rootScope, $scope, $state, $http, $interval) {
 		$http.get(URL_SETTINGS_GET).
 		then(function (response) {
 			settings = angular.fromJson(response.data);
+			$scope.DeveloperMode = settings.DeveloperMode;
 			$scope.visible_uat = settings.UAT_Enabled;
 			$scope.visible_es = settings.ES_Enabled;
+			$scope.visible_ping = settings.Ping_Enabled;
+			if (settings.Ping_Enabled) {
+				$scope.visible_uat = true;
+				$scope.visible_es = true;
+			}
 			$scope.visible_gps = settings.GPS_Enabled;
-			$scope.visible_ahrs = settings.AHRS_Enabled;
 		}, function (response) {
 			// nop
 		});
@@ -119,7 +185,16 @@ function StatusCtrl($rootScope, $scope, $state, $http, $interval) {
 		getTowers();
 	}, (5 * 1000), 0, false);
 
-
+    var clicks = 0;
+    var clickSeconds = 0;
+    var DeveloperModeClick = 0;
+    
+    var clickInterval = $interval(function () {
+        if ((clickSeconds >= 3))
+            clicks=0;
+        clickSeconds++;
+    }, 1000);
+    
 	$state.get('home').onEnter = function () {
 		// everything gets handled correctly by the controller
 	};
@@ -130,7 +205,26 @@ function StatusCtrl($rootScope, $scope, $state, $http, $interval) {
 		}
 		$interval.cancel(updateTowers);
 	};
-
+    
+    $scope.VersionClick = function() {
+        if (clicks==0)
+        {
+            clickSeconds = 0;
+        }
+        ++clicks;
+        if ((clicks > 7) && (clickSeconds < 3))
+        {
+            clicks=0;
+            clickSeconds=0;
+            DeveloperModeClick = 1;
+            $http.get(URL_DEV_TOGGLE_GET);
+            location.reload();
+        }
+    }
+    
+    $scope.GetDeveloperModeClick = function() {
+        return DeveloperModeClick;
+    }
 	// Status Controller tasks
 	setHardwareVisibility();
 	connect($scope); // connect - opens a socket and listens for messages

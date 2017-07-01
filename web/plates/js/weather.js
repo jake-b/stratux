@@ -140,7 +140,17 @@ function WeatherCtrl($rootScope, $scope, $state, $http, $interval) {
 		var dNow = new Date();
 		var dThen = parseShortDatetime(obj.Time);
 		data_item.age = dThen.getTime();
-		data_item.time = deltaTimeString(dNow - dThen) + " old";
+		var diff_ms = Math.abs(dThen - dNow);
+
+		// If time is more than two days away, don't attempt to display data age.
+		if (diff_ms > (1000*60*60*24*2)) {
+			data_item.time = "?";
+		} else if (dThen > dNow) {
+			data_item.time = deltaTimeString(dThen - dNow) + " from now";
+		} else {
+			data_item.time = deltaTimeString(dNow - dThen) + " old";
+		}
+
 		// data_item.received = utcTimeString(obj.LocaltimeReceived);
 		data_item.data = obj.Data;
 	}
@@ -154,16 +164,16 @@ function WeatherCtrl($rootScope, $scope, $state, $http, $interval) {
 			$scope.socket = socket; // store socket in scope for enter/exit usage
 		}
 
-		$scope.ConnectState = "Not Receiving";
+		$scope.ConnectState = "Disconnected";
 
 		socket.onopen = function (msg) {
 			// $scope.ConnectStyle = "label-success";
-			$scope.ConnectState = "Receiving";
+			$scope.ConnectState = "Connected";
 		};
 
 		socket.onclose = function (msg) {
 			// $scope.ConnectStyle = "label-danger";
-			$scope.ConnectState = "Not Receiving";
+			$scope.ConnectState = "Disconnected";
 			$scope.$apply();
 			setTimeout(connect, 1000);
 		};
@@ -211,7 +221,7 @@ function WeatherCtrl($rootScope, $scope, $state, $http, $interval) {
 
 	// perform cleanup every 5 minutes
 	var clearStaleMessages = $interval(function () {
-		// remove stail data = anything more than 30 minutes old
+		// remove stale data = anything more than 30 minutes old
 		var dirty = false;
 		var cutoff = Date.now() - (30 * 60 * 1000);
 

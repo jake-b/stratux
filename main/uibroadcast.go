@@ -1,6 +1,17 @@
+/*
+	Copyright (c) 2015-2016 Christopher Young
+	Distributable under the terms of The "BSD New" License
+	that can be found in the LICENSE file, herein included
+	as part of this header.
+
+	uibroadcast.go: Helper functions for managementinterface - notification channels for update "subscriptions"
+	 (used for weather and traffic websockets).
+*/
+
 package main
 
 import (
+	"encoding/json"
 	"golang.org/x/net/websocket"
 	"sync"
 	"time"
@@ -24,6 +35,11 @@ func NewUIBroadcaster() *uibroadcaster {
 
 func (u *uibroadcaster) Send(msg []byte) {
 	u.messages <- msg
+}
+
+func (u *uibroadcaster) SendJSON(i interface{}) {
+	j, _ := json.Marshal(&i)
+	u.Send(j)
 }
 
 func (u *uibroadcaster) AddSocket(sock *websocket.Conn) {

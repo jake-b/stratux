@@ -2,6 +2,27 @@
 	font-size: 0.85em;
 }
 
+.modal {
+}
+.vertical-alignment-helper {
+	display:table;
+	height: 100%;
+	width: 75%;
+}
+.vertical-align-center {
+	/* To center vertically */
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.modal-content {
+	/* Bootstrap sets the size of the modal in the modal-dialog class, we need to inherit it */
+	width:inherit;
+	height:inherit;
+	/* To center horizontally */
+	margin: 0 auto;
+}
+
 .traffic-page {}
 
 .weather-page {}
@@ -110,36 +131,76 @@
 	content: "\f1d9";
 }
 
+.report_TAF {
+	border-radius: 5px;
+	background-color: cornsilk;
+	color: black;
+}
+
+.report_PIREP {
+	border-radius: 5px;
+	background-color: gainsboro;
+	color: black;
+}
+
+.report_WINDS {
+	border-radius: 5px;
+	background-color: lavender;
+	color: black;
+}
+
 .flight_condition_VFR {
+	border-radius: 5px;
 	background-color: forestgreen;
 	color: white;
 }
 
 .flight_condition_MVFR {
+	border-radius: 5px;
 	background-color: blue;
 	color: white;
 }
 
 .flight_condition_IFR {
+	border-radius: 5px;
 	background-color: crimson;
 	color: white;
 }
 
 .flight_condition_LIFR {
+	border-radius: 5px;
 	background-color: darkorchid;
 	color: white;
 }
 
 .paperairplane_left,
-.traffic-style1 {
+.traffic-style1,
+.traffic-style10,
+.traffic-style11 {
 	color: #000000;
 	background-color: cornflowerblue;
 }
 
+.traffic-style12,
+.traffic-style13,
+.traffic-style14 {
+	color: #000000;
+	background-color: skyblue;
+}
+
 .paperairplane_right,
-.traffic-style2 {
+.traffic-style2,
+.traffic-style20,
+.traffic-style21 {
 	color: #000000;
 	background-color: darkkhaki
+}
+
+.traffic-style22,
+.traffic-style23,
+.traffic-style24 {
+	color: #000000;
+	background-color: khaki
 }
 
 .icon-red {
@@ -178,9 +239,27 @@
 	padding: 1px 2px 1px 3px;
 }
 
+.fake-btn {
+	background-color:#ccc;
+	margin-bottom:0;
+	font-weight:400; 
+	text-align:center;
+	vertical-align:middle;
+	cursor:pointer;
+	border:1px solid transparent;
+	white-space:nowrap;
+	padding: 6px 12px;
+	line-height: 1.43;
+	border-radius:4px;
+}
+.fake-btn-block {
+	display:inline-block;
+	width: 100%;
+}
+
 
 /* ***************************************************************************
-everything below this comment represents tweeks to the mobile-angular-uis CSS
+everything below this comment represents tweaks to the mobile-angular-uis CSS
 *************************************************************************** */
 
 @font-face {
@@ -339,6 +418,9 @@ pre {
 	border-radius: 0px;
 }
 
+body {
+    font-weight: 400;
+}
 
 /* change right sidebar behavior to always push */
 
