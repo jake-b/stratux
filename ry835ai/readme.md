@@ -56,5 +56,8 @@ Revision History
 - 0.4  - Added "PWR IN" circut -- [see page 14](https://learn.adafruit.com/downloads/pdf/introducing-the-raspberry-pi-model-b-plus-plus-differences-vs-model-b.pdf)
          Added FAN output controlled by GPIO4.
          (minor change to explicitly list R1's value as 10k)
-
+- 0.5  - Modified fan control signal to use GPIO18 rather than GPIO4.
+         This is consistent with currently used AHRS boards.
+         This revision has not been manufactured or tested, so make sure to 
+         ERC/DRC and double check if you decide to have this made.
 
